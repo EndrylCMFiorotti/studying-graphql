@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.widget.EmojiCompatConfigurationView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.studying_graphql.databinding.DialogCountryBinding
 import com.example.studying_graphql.databinding.FragmentCountriesBinding
@@ -56,8 +56,14 @@ class CountriesFragment : Fragment() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun displayCountryDialog(it: CountryDetailsPresentation) {
+    private fun displayCountriesOnScreen(list: List<CountryPresentation>) {
+        binding.rvCountries.adapter = CountryAdapter(list) {
+            viewModel.getCountry(it)
+            setupCountryDialog()
+        }
+    }
+
+    private fun setupCountryDialog() {
         dialogBinding = DialogCountryBinding.inflate(LayoutInflater.from(requireContext()))
         dialog = Dialog(requireContext()).apply {
             setContentView(dialogBinding.root)
@@ -65,6 +71,11 @@ class CountriesFragment : Fragment() {
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             show()
         }
+        setupLoading(true)
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun displayCountryDialog(it: CountryDetailsPresentation) {
         with(dialogBinding) {
             tvImageCountry.text = it.emoji
             tvNameCountry.text = it.name
@@ -73,11 +84,10 @@ class CountriesFragment : Fragment() {
             tvCurrencyCountry.text = "Currency: ${it.currency}"
             tvLanguageCountry.text = "Language: ${it.languages}"
         }
+        setupLoading(false)
     }
 
-    private fun displayCountriesOnScreen(list: List<CountryPresentation>) {
-        binding.rvCountries.adapter = CountryAdapter(list) {
-            viewModel.getCountry(it)
-        }
+    private fun setupLoading(loading: Boolean) {
+        dialogBinding.pbLoading.isVisible = loading
     }
 }
