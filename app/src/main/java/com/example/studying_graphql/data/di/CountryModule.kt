@@ -34,7 +34,10 @@ val module = module {
     }
 
     factory { CountryRepository(get(named(COUNTRY_GRAPHQL_KEY))) }
+
     factory { GetCountryUseCase(get()) }
+
     factory { GetCountriesUseCase(get()) }
+
     viewModel { CountryViewModel(get(), get()) }
 }

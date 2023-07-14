@@ -87,7 +87,7 @@ class CountriesFragment : Fragment() {
         setupLoading(false)
     }
 
-    private fun setupLoading(loading: Boolean) {
-        dialogBinding.pbLoading.isVisible = loading
+    private fun setupLoading(isLoading: Boolean) {
+        dialogBinding.pbLoading.isVisible = isLoading
     }
 }
